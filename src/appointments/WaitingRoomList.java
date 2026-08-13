@@ -4,6 +4,8 @@
  */
 package appointments;
 
+import clinic.SequentialDynamicsList;
+import java.util.Iterator;
 import java.util.Queue;
 import patients.Patient;
 
@@ -11,7 +13,7 @@ import patients.Patient;
  *
  * @author Dario R
  */
-public class WaitingRoomList implements SequentialDynamicList<Appointment> {
+public class WaitingRoomList implements SequentialDynamicsList<Appointment> {
    private Queue<Appointment> waitingList;
 
     @Override
@@ -32,6 +34,36 @@ public class WaitingRoomList implements SequentialDynamicList<Appointment> {
     @Override
     public int hashCode() {
         return super.hashCode(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Appointment get() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean remove() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Iterator getALL() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean add(Appointment item) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int size() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
    
    

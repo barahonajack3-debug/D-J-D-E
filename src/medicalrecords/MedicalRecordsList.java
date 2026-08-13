@@ -58,6 +58,6 @@ public class MedicalRecordsList implements SequentialDynamicsList<MedicalRecord>
 
     @Override
     public boolean isEmpty() {
-        return medicalHistory.isEmpty();
+        return medicalHistory.isEmpty(); 
     }    
 }

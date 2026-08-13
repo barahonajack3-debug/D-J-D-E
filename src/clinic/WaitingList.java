@@ -8,6 +8,7 @@ package clinic;
  *
  * @author Dario R
  */
-public interface WaitingList {
-    
+public interface WaitingList <T,K> extends DynamicList<T>{
+    public T get(K id);
+    public boolean remove(K id);
 }
