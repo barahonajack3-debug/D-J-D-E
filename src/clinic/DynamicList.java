@@ -7,7 +7,11 @@ package clinic;
 /**
  *
  * @author Dario R
+ * parametro //<T>//
+ * pametro //<K>//
  */
-public interface DynamicList {
-    
+public interface DynamicList <T,k> {
+    public boolean add(T item);
+    public int size();
+    public boolean isEmpty();
 }
