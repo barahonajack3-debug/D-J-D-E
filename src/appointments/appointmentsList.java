@@ -5,6 +5,7 @@
 package appointments;
 
 import clinic.KeyDynamicsLists;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
@@ -36,6 +37,11 @@ public class appointmentsList implements KeyDynamicsLists<Appointment, String>{
 
     @Override
     public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Iterator getALL() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
             
