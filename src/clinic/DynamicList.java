@@ -4,6 +4,8 @@
  */
 package clinic;
 
+import java.util.Iterator;
+
 /**
  *
  * @author Dario R
@@ -11,6 +13,7 @@ package clinic;
  * pametro //<K>//
  */
 public interface DynamicList <T> {
+    public Iterator getALL();
     public boolean add(T item);
     public int size();
     public boolean isEmpty();
