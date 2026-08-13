@@ -5,6 +5,7 @@
 package medicalrecords;
 
 import clinic.SequentialDynamicsList;
+import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -15,35 +16,48 @@ import java.util.Stack;
 public class MedicalRecordsList implements SequentialDynamicsList<MedicalRecord>{
     private Stack<MedicalRecord> medicalHistory;
 
+    public MedicalRecordsList() {
+        this.medicalHistory = new Stack();
+    }
+   
     @Override
     public MedicalRecord get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+          try{
+            return medicalHistory.pop();
+        }catch(EmptyStackException e){
+            return null;
+        }
+        
     }
 
     @Override
     public boolean remove() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try{
+            return medicalHistory.pop()!=null;
+        }catch(EmptyStackException e){
+            return false;
+        }
+        
     }
 
     @Override
     public boolean add(MedicalRecord item) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return medicalHistory.add(item);
     }
 
     @Override
     public Iterator getALL() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       if(medicalHistory.isEmpty()) return null;
+        return medicalHistory.iterator();
+    }
+    
+    @Override
+    public int size() {
+       return medicalHistory.size();
     }
 
-    
+    @Override
+    public boolean isEmpty() {
+        return medicalHistory.isEmpty();
+    }    
 }
