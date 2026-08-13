@@ -4,6 +4,7 @@
  */
 package appointments;
 
+import clinic.SequentialDynamicsList;
 import java.util.Queue;
 import patients.Patient;
 
@@ -11,7 +12,7 @@ import patients.Patient;
  *
  * @author Dario R
  */
-public class WaitingRoomList implements SequentialDynamicList<Appointment> {
+public class WaitingRoomList implements SequentialDynamicsList<Appointment> {
    private Queue<Appointment> waitingList;
 
     @Override
