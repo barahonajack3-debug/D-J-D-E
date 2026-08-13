@@ -10,7 +10,7 @@ package clinic;
  * parametro //<T>//
  * pametro //<K>//
  */
-public interface DynamicList <T,k> {
+public interface DynamicList <T> {
     public boolean add(T item);
     public int size();
     public boolean isEmpty();
