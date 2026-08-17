@@ -15,34 +15,43 @@ import java.util.Iterator;
 public class PatientList implements KeyDynamicsLists<Patient,String>{
     private HashMap<String,Patient> Patient;
 
+    public PatientList() {
+        this.Patient = new HashMap();
+    }
+
+    
+    
     @Override
     public Patient get(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(!Patient.containsKey(id)) return null;
+        return Patient.get(id);
     }
 
     @Override
     public boolean remove(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Patient.remove(id)!=null;
     }
 
     @Override
     public Iterator getALL() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       if(Patient.isEmpty())return null;
+        return Patient.values().iterator();
     }
 
     @Override
     public boolean add(Patient item) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+      if(Patient.containsKey(item.getId())) return false;
+      return Patient.put(item.getId(),item)== null;
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return Patient.size();
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Patient.isEmpty();
     }
 
 

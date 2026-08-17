@@ -5,7 +5,7 @@
 package appointments;
 
 import clinic.SequentialDynamicsList;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 import patients.Patient;
 
@@ -13,57 +13,39 @@ import patients.Patient;
  *
  * @author Dario R
  */
-public class WaitingRoomList implements SequentialDynamicsList<Appointment> {
-   private Queue<Appointment> waitingList;
+public class WaitingRoomList implements SequentialDynamicsList<Patient> {
+   Queue<Patient> waitingList;
 
-    @Override
-    public String toString() {
-        return super.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    public WaitingRoomList(Queue<Patient> waitingList) {
+        this.waitingList = new LinkedList();
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public Appointment get() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Patient get() {
+        return waitingList.peek();
     }
 
     @Override
     public boolean remove() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return waitingList.poll()!= null;
     }
-
+    
     @Override
-    public Iterator getALL() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean add(Appointment item) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public boolean add(Patient item) {
+      try 
+        return waitingList.add(item);
+    } catch (IllegalStateException e){
+        
+    }return false;
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return waitingList.size();
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return waitingList.isEmpty();
     }
    
    
