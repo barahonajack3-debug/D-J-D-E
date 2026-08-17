@@ -13,11 +13,11 @@ import patients.Patient;
  *
  * @author Dario R
  */
-public class WaitingRoomList implements SequentialDynamicsList<Patient> {
-   Queue<Patient> waitingList;
+public abstract class WaitingRoomList implements SequentialDynamicsList<Patient> {
+    Queue<Patient> waitingList;
 
     public WaitingRoomList(Queue<Patient> waitingList) {
-        this.waitingList = new LinkedList();
+        this.waitingList = waitingList;
     }
 
     @Override
@@ -27,16 +27,17 @@ public class WaitingRoomList implements SequentialDynamicsList<Patient> {
 
     @Override
     public boolean remove() {
-       return waitingList.poll()!= null;
+        return waitingList.poll() != null;
     }
-    
+
     @Override
     public boolean add(Patient item) {
-      try 
-        return waitingList.add(item);
-    } catch (IllegalStateException e){
-        
-    }return false;
+        try {
+            return waitingList.add(item);
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
 
     @Override
     public int size() {
@@ -47,6 +48,4 @@ public class WaitingRoomList implements SequentialDynamicsList<Patient> {
     public boolean isEmpty() {
         return waitingList.isEmpty();
     }
-   
-   
 }
