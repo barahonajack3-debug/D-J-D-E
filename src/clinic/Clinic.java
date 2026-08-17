@@ -10,6 +10,7 @@ import appointments.WaitingRoomList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
+import patients.Patient;
 import patients.PatientList;
 /**
  *
@@ -17,7 +18,7 @@ import patients.PatientList;
  */
 public class Clinic {
     
-    private PatientList Patient;
+    private PatientList patients;
     private appointmentsList appointments;
     private WaitingRoomList waitingRoom;
     
@@ -27,48 +28,55 @@ public class Clinic {
         this.waitingRoom = new WaitingRoomList(new LinkedList<>());
 
     public Clinic(PatientList Patient, appointmentsList appointments, WaitingRoomList waitingRoom) {
-        this.Patient = Patient;
+        this.Patients = Patient;
         this.appointments = appointments;
         this.waitingRoom = waitingRoom;
     }
     
-public boolean addPatient(Patient patient) {
-        
-    }
+public boolean addPatient(patients patient) {
+    return patients.add(patient);    }
 
     public Patient findPatient(String id) {
+         return patients.get(id);
     }
 
     public boolean removePatient(String id) {
+         return patients.remove(id);
     }
 
     public Iterator<Patient> getPatients() {
+        return patients.getALL();
     }
 
     public boolean scheduleAppointment(Appointment appointment) {
+        return appointments.add(appointment);
     }
 
     public Appointment findAppointment(String code) {
+        return appointments.get(code)
     }
 
     public boolean rescheduleAppointment(String code, LocalDate newDate, LocalTime newTime) {
+        
 
     }
 
     public boolean cancelAppointment(String code) {
+        
 
     }
 
     public Iterator<Appointment> getAppointments() {
+        
 
     }
 
     public boolean checkInPatient(String patientId) {
-
+            
     }
 
     public Patient getNextPatient() {
-
+        waitingRoom.get();
     }
 
     public Patient attendNextPatient() {
@@ -76,7 +84,7 @@ public boolean addPatient(Patient patient) {
     }
 
     public int getWaitingPatientCount() {
-
+        return waitingRoom.size();
     }
 
     public boolean isPatientWaiting(String patientId) {
