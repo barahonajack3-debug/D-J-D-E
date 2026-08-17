@@ -5,6 +5,7 @@
 package appointments;
 
 import clinic.SequentialDynamicsList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import patients.Patient;
@@ -13,7 +14,7 @@ import patients.Patient;
  *
  * @author Dario R
  */
-public abstract class WaitingRoomList implements SequentialDynamicsList<Patient> {
+public class WaitingRoomList implements SequentialDynamicsList<Patient> {
     Queue<Patient> waitingList;
 
     public WaitingRoomList(Queue<Patient> waitingList) {
@@ -47,5 +48,10 @@ public abstract class WaitingRoomList implements SequentialDynamicsList<Patient>
     @Override
     public boolean isEmpty() {
         return waitingList.isEmpty();
+    }
+
+    @Override
+    public Iterator getALL() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
