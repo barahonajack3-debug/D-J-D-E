@@ -9,6 +9,7 @@ import appointments.Appointment;
 import appointments.WaitingRoomList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.TreeSet;
 import patients.PatientList;
 /**
  *
@@ -19,6 +20,11 @@ public class Clinic {
     private PatientList Patient;
     private appointmentsList appointments;
     private WaitingRoomList waitingRoom;
+    
+    public Clinic() {
+        this.Patient = new PatientList();
+        this.appointments = new appointmentsList(new TreeSet<>());
+        this.waitingRoom = new WaitingRoomList(new LinkedList<>());
 
     public Clinic(PatientList Patient, appointmentsList appointments, WaitingRoomList waitingRoom) {
         this.Patient = Patient;
