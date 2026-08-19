@@ -35,19 +35,34 @@ public class ClinicControler {
     }
     
     public void addPatient(Patient patient){
-
+        boolean status = clinic.addPatient(patient);
+        if (status){
+            view.showMessage("El paciente se agrego correctamente");
+        }else{
+            view.showMessage("no sen pudo agregar el paciente");
+        }
     }
 
     public void findPatient(String id){
-        
+        Patient patient = clinic.findPatient(id);
+        if(patient == null){
+            view.showError("No encontramos un paciente con su id");
+            view.clear();
+        }
+        view.showData(patient);
     }
 
     public void removePatient(String id){
-        
+        boolean status =clinic.removePatient(id);
+        if (status){
+            view.showMessage("El paciente ha sido eliminado");
+        }else{
+            view.showError("El paciente no se pudo eliminar");
+        }
     }
 
     public Iterator<Patient> getPatients(){
-        
+        return clinic.getPatients();
     }
 
     public boolean scheduleAppointment(Appointment appointment){
@@ -81,31 +96,50 @@ public class ClinicControler {
     }
 
     public boolean cancelAppointment(String code){
-        
-        return false;
+        boolean status = clinic.cancelAppointment(code);
+        if (status){
+            view.showMessage("La cita se cancelado");
+        }else{
+            view.showError("No se puede cancelar la cita");
+        }
+        return status;
     }
 
     public Iterator<Appointment> getAppointments(){
-        return null;
+        return clinic.getAppointments();
     }
 
     public boolean checkInPatient(String patientId){
-        return false;
+        boolean status = clinic.checkInPatient(patientId);
+        if (status){
+            view.showData("Paciente ingresado a la sala de espera");
+        }else{
+            view.showError("No se pudo ingresar el paciente a la sala de espera");
+        }
+        return status;
     }
 
     public Patient getNextPatient(){
-        return null;
+        Patient patient = clinic.getNextPatient();
+        if (patient == null){
+            view.showError("No hay paciente en sla de espera");
+        }
+        return patient;
     }
 
     public Patient attendNextPatient(){
-        return null;
+        Patient patient = clinic.attendNextPatient();
+        if (patient == null ){
+            view.showError("No hay paciente en la sala de espera" + patient.getFullName());
+        }
+        return patient;
     }
 
     public int getWaitingPatientCount(){
-        return 0;
+        return clinic.getWaitingPatientCount();
     }
 
     public boolean isPatientWaiting(String patientId){
-        return false;
+        return clinic.isPatientWaiting(patientId);
     }
 }
