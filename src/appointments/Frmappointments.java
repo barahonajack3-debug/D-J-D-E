@@ -4,19 +4,54 @@
  */
 package appointments;
 
+import clinic.ClinicControler;
+import clinic.Views;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import patients.Patient;
+
 /**
  *
  * @author Usuario
  */
-public class Frmappointments extends javax.swing.JFrame {
+public class Frmappointments extends javax.swing.JFrame implements Views<Object> {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Frmappointments.class.getName());
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+    private final ClinicControler controller;
 
     /**
      * Creates new form Frmappointments
      */
     public Frmappointments() {
+        this(ClinicControler.getInstance(null));
+    }
+
+    /** Permite compartir el controlador de la aplicación con esta vista. */
+    public Frmappointments(ClinicControler controller) {
+        if (controller == null) {
+            throw new IllegalArgumentException("El controlador es obligatorio");
+        }
+        this.controller = controller;
+        controller.setView(this);
         initComponents();
+        configurarFormulario();
+    }
+
+    private void configurarFormulario() {
+        setTitle("Registro de citas");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+            "Programado", "Registrado", "Completado", "Cancelado"
+        }));
+        jTextField3.setToolTipText("Formato: AAAA-MM-DD");
+        jTextField4.setToolTipText("Formato: HH:mm (por ejemplo, 14:30)");
     }
 
     /**
@@ -62,7 +97,7 @@ public class Frmappointments extends javax.swing.JFrame {
 
         jTextField4.addActionListener(this::jTextField4ActionPerformed);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Completado", "Pendiente" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Programado", "Registrado", "Completado", "Cancelado" }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Eliminar.png"))); // NOI18N
@@ -175,20 +210,92 @@ public class Frmappointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
+        guardarCita();
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        clear();
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
+        // El estado se lee cuando el usuario guarda la cita.
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        guardarCita();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void guardarCita() {
+        try {
+            String code = textoObligatorio(jTextField2, "El código");
+            String patientId = textoObligatorio(jTextField1, "El paciente");
+            String reason = textoObligatorio(jTextField5, "El motivo");
+            LocalDate date = LocalDate.parse(textoObligatorio(jTextField3, "La fecha"), DATE_FORMAT);
+            LocalTime time = LocalTime.parse(textoObligatorio(jTextField4, "La hora"), TIME_FORMAT);
+
+            Patient patient = controller.findPatient(patientId);
+            if (patient == null) return;
+
+            Appointment appointment = new Appointment(code, patient, date, time, reason);
+            appointment.setStatus(estadoSeleccionado());
+            if (controller.scheduleAppointment(appointment)) {
+                clear();
+            }
+        } catch (DateTimeParseException ex) {
+            showError("Use fecha AAAA-MM-DD y hora HH:mm.");
+        } catch (IllegalArgumentException ex) {
+            showError(ex.getMessage());
+        }
+    }
+
+    private String textoObligatorio(javax.swing.JTextField field, String label) {
+        String value = field.getText().trim();
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(label + " es obligatorio.");
+        }
+        return value;
+    }
+
+    private AppointmentStatus estadoSeleccionado() {
+        String selected = (String) jComboBox1.getSelectedItem();
+        for (AppointmentStatus status : AppointmentStatus.values()) {
+            if (status.getStatus().equals(selected)) return status;
+        }
+        throw new IllegalArgumentException("Seleccione un estado válido.");
+    }
+
+    @Override
+    public void clear() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jComboBox1.setSelectedItem(AppointmentStatus.SCHEDULED.getStatus());
+    }
+
+    @Override
+    public void showData(Object data) {
+        if (!(data instanceof Appointment)) return;
+        Appointment appointment = (Appointment) data;
+        jTextField2.setText(appointment.getCode());
+        jTextField1.setText(appointment.getPatient().getId());
+        jTextField3.setText(appointment.getDate().format(DATE_FORMAT));
+        jTextField4.setText(appointment.getTime().format(TIME_FORMAT));
+        jTextField5.setText(appointment.getReason());
+        jComboBox1.setSelectedItem(appointment.getStatus().getStatus());
+    }
+
+    @Override
+    public void showError(String error) {
+        JOptionPane.showMessageDialog(this, error, "Citas", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Citas", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments

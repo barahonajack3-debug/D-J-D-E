@@ -43,13 +43,15 @@ public class ClinicControler {
         }
     }
 
-    public void findPatient(String id){
+    public Patient findPatient(String id){
         Patient patient = clinic.findPatient(id);
         if(patient == null){
             view.showError("No encontramos un paciente con su id");
             view.clear();
+            return null;
         }
         view.showData(patient);
+        return patient;
     }
 
     public void removePatient(String id){
