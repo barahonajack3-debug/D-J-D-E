@@ -12,8 +12,7 @@ import patients.Patient;
  *
  * @author jprod
  */
-public class Appointment {
-    //implememtar Comparable<Appointment>
+public class Appointment implements Comparable<Appointment> {
     private String code;
     private Patient patient;
     private LocalDate date;
@@ -55,19 +54,39 @@ public class Appointment {
     }
     
     public void reschedule(LocalDate newDate, LocalTime newTime){
-        
+        if (newDate == null || newTime == null) {
+            throw new IllegalArgumentException("La fecha y la hora son obligatorias");
+        }
+        this.date = newDate;
+        this.time = newTime;
     }
 
     public void cancel(){
-        
+        this.status = AppointmentStatus.CANCELLED;
     }
 
     public boolean isPending(){
-        return false;
+        return status == AppointmentStatus.SCHEDULED || status == AppointmentStatus.CHECKED_IN;
     }
 
     public boolean isToday(){
-        return this.date==LocalDate.now();
+        return this.date.equals(LocalDate.now());
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("El estado es obligatorio");
+        }
+        this.status = status;
+    }
+
+    @Override
+    public int compareTo(Appointment other) {
+        int byDate = date.compareTo(other.date);
+        if (byDate != 0) return byDate;
+        int byTime = time.compareTo(other.time);
+        if (byTime != 0) return byTime;
+        return code.compareTo(other.code);
     }
     
     //public int compareTo(Appointment other); date → time → code

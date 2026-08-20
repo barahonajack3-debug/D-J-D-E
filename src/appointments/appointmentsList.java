@@ -16,7 +16,7 @@ public class appointmentsList implements KeyDynamicsLists<Appointment, String>{
     TreeSet<Appointment> appointments;
 
     public appointmentsList(TreeSet<Appointment> appointment) {
-        this.appointments = new TreeSet();
+        this.appointments = appointment == null ? new TreeSet<>() : appointment;
     }
 
     @Override
