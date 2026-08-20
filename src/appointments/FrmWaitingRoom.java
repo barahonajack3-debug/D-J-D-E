@@ -4,6 +4,11 @@
  */
 package appointments;
 
+import clinic.ClinicControler;
+import clinic.Views;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Dario R
@@ -11,14 +16,22 @@ package appointments;
 public class FrmWaitingRoom extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmWaitingRoom.class.getName());
-
+ private ClinicControler controller;
+ 
+    public FrmWaitingRoom(ClinicControler controller) {
+        this.controller = controller;
+        controller.setView((Views) this);
+        initComponents();
+    }
     /**
      * Creates new form FrmWaitingRoom
      */
-    public FrmWaitingRoom() {
+    public FrmWaitingRoom(){
         initComponents();
+        controller = ClinicControler.getInstance((Views) this);
+        controller.setView((Views) this);
+        ShowData();        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,7 +116,7 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -124,18 +137,18 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
                         .addGap(233, 233, 233)
                         .addComponent(jLabel2))
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
+                        .addGap(66, 66, 66)
                         .addComponent(PnOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(125, 125, 125))
+                .addGap(129, 129, 129))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(PnOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
@@ -155,9 +168,27 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+private void ShowData() {
+    DefaultTableModel model = (DefaultTableModel) TblRecord.getModel();
 
+    Iterator<Appointment> it = controller.getAppointments();
+
+    while (it.hasNext()) {
+        Appointment cita = it.next();
+
+        model.addRow(new Object[]{
+            cita.getCode(),                   
+            cita.getPatient().getId(),         
+            cita.getPatient().getFullName(),   
+            cita.getDate().toString(),        
+            cita.getTime(),                   
+            cita.getStatus().getStatus()       
+        });
+    }
+}
+        
     private void BtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_BtnClearActionPerformed
 
     private void BtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSaveActionPerformed
