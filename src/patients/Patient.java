@@ -68,22 +68,27 @@ public class Patient {
     }
     
     public void addMedicalRecord(MedicalRecord record){
-        
+        medicalHistory.add(record);
     }
     
     public MedicalRecord getLatestMedicalRecord(){
-        return null;
+        Iterator<MedicalRecord> history = medicalHistory.getALL();
+        MedicalRecord latest = null;
+        while (history != null && history.hasNext()) {
+            latest = history.next();
+        }
+        return latest;
     }
     
     public MedicalRecord removeLatestMedicalRecord(){
-        return null;
+        return medicalHistory.get();
     }
     
     public Iterator<MedicalRecord> getMedicalHistory() {
-        return null;
+        return medicalHistory.getALL();
     }
     
     public boolean hasMedicalHistory(){
-        return false;
+        return !medicalHistory.isEmpty();
     }
 }

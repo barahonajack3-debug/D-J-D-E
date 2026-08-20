@@ -4,19 +4,69 @@
  */
 package medicalrecords;
 
+import clinic.ClinicControler;
+import clinic.Views;
+import java.util.Iterator;
+import javax.swing.JOptionPane;
+import patients.Patient;
+
 /**
  *
  * @author USER
  */
-public class FrmMedicalRecords extends javax.swing.JFrame {
+public class FrmMedicalRecords extends javax.swing.JFrame implements Views<Patient> {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMedicalRecords.class.getName());
+    private ClinicControler controller;
+    private Patient currentPatient;
 
     /**
      * Creates new form frmMedicalRecords
      */
     public FrmMedicalRecords() {
         initComponents();
+        controller = ClinicControler.getInstance(this);
+        controller.setView(this);
+        clear();
+    }
+
+    public void clear() {
+        currentPatient = null;
+        lblNombrePaciente.setText("Paciente: no seleccionado");
+        lblMotivoConsulta.setText("Motivo: no definido");
+        txtDiagnostico.setText("");
+        txtTratamiento.setText("");
+        txtNota.setText("");
+    }
+
+    public void showData(Patient patient) {
+        if (patient == null) {
+            currentPatient = null;
+            return;
+        }
+        currentPatient = patient;
+        lblNombrePaciente.setText("Paciente: " + patient.getFullName());
+
+        MedicalRecord latest = patient.getLatestMedicalRecord();
+        if (latest == null) {
+            lblMotivoConsulta.setText("Motivo: no definido");
+            txtDiagnostico.setText("");
+            txtTratamiento.setText("");
+            txtNota.setText("");
+            return;
+        }
+        lblMotivoConsulta.setText("Motivo: " + latest.getConsultationReason());
+        txtDiagnostico.setText(latest.getDiagnosis());
+        txtTratamiento.setText(latest.getTreatment());
+        txtNota.setText(latest.getNotes());
+    }
+
+    public void showError(String error) {
+        JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Medical Records", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -65,17 +115,14 @@ public class FrmMedicalRecords extends javax.swing.JFrame {
 
         txtDiagnostico.setColumns(20);
         txtDiagnostico.setRows(5);
-        txtDiagnostico.setText("Diagnostico:");
         jScrollPane1.setViewportView(txtDiagnostico);
 
         txtTratamiento.setColumns(20);
         txtTratamiento.setRows(5);
-        txtTratamiento.setText("Tratamiento:");
         jScrollPane2.setViewportView(txtTratamiento);
 
         txtNota.setColumns(20);
         txtNota.setRows(5);
-        txtNota.setText("Nota:");
         jScrollPane3.setViewportView(txtNota);
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -116,23 +163,21 @@ public class FrmMedicalRecords extends javax.swing.JFrame {
                             .addComponent(lblNombrePaciente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(lblMotivoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnGuardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnVer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btnEliminar))
+                    .addComponent(lblMotivoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,16 +194,16 @@ public class FrmMedicalRecords extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblMotivoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                    .addComponent(btnVer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(31, 31, 31))
         );
 
@@ -166,19 +211,87 @@ public class FrmMedicalRecords extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String cedula = txtCedula.getText().trim();
+        if (cedula.isEmpty()) {
+            showError("Ingrese la cedula del paciente");
+            return;
+        }
+        controller.findPatient(cedula);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        if (currentPatient == null) {
+            showError("Primero debe buscar un paciente");
+            return;
+        }
+
+        String diagnosis = txtDiagnostico.getText().trim();
+        String treatment = txtTratamiento.getText().trim();
+        String notes = txtNota.getText().trim();
+
+        if (diagnosis.isEmpty() || treatment.isEmpty()) {
+            showError("Debe ingresar el diagnostico y el tratamiento");
+            return;
+        }
+
+        String reason = JOptionPane.showInputDialog(this, "Motivo de consulta:");
+        if (reason == null) {
+            return;
+        }
+        reason = reason.trim();
+        if (reason.isEmpty()) {
+            showError("Debe ingresar el motivo de consulta");
+            return;
+        }
+
+        MedicalRecord record = new MedicalRecord(reason, diagnosis, treatment, notes);
+        currentPatient.addMedicalRecord(record);
+        lblMotivoConsulta.setText("Motivo: " + reason);
+        showMessage("Registro medico guardado correctamente");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        // TODO add your handling code here:
+        if (currentPatient == null) {
+            showError("Primero debe buscar un paciente");
+            return;
+        }
+
+        if (!currentPatient.hasMedicalHistory()) {
+            showMessage("El paciente no tiene historial medico");
+            return;
+        }
+
+        StringBuilder history = new StringBuilder();
+        Iterator<MedicalRecord> iterator = currentPatient.getMedicalHistory();
+        int recordNumber = 1;
+
+        while (iterator != null && iterator.hasNext()) {
+            MedicalRecord record = iterator.next();
+            history.append("Registro ").append(recordNumber++).append("\n")
+                    .append("Fecha: ").append(record.getDate()).append("\n")
+                    .append("Motivo: ").append(record.getConsultationReason()).append("\n")
+                    .append("Diagnostico: ").append(record.getDiagnosis()).append("\n")
+                    .append("Tratamiento: ").append(record.getTreatment()).append("\n")
+                    .append("Nota: ").append(record.getNotes()).append("\n\n");
+        }
+
+        JOptionPane.showMessageDialog(this, history.toString(), "Historial medico", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        if (currentPatient == null) {
+            showError("Primero debe buscar un paciente");
+            return;
+        }
+
+        MedicalRecord deletedRecord = currentPatient.removeLatestMedicalRecord();
+        if (deletedRecord == null) {
+            showError("El paciente no tiene registros medicos para eliminar");
+            return;
+        }
+
+        showMessage("Se elimino el ultimo registro medico");
+        showData(currentPatient);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
