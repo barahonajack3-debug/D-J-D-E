@@ -223,13 +223,14 @@ public class Frmappointments extends javax.swing.JFrame implements Views<Object>
     private void guardarCita() {
         try {
             String code = textoObligatorio(jTextField2, "El código");
-            String patientId = textoObligatorio(jTextField1, "El paciente");
+            String cedula = textoObligatorio(jTextField6, "La cédula");
             String reason = textoObligatorio(jTextField5, "El motivo");
             LocalDate date = LocalDate.parse(textoObligatorio(jTextField3, "La fecha"), DATE_FORMAT);
             LocalTime time = LocalTime.parse(textoObligatorio(jTextField4, "La hora"), TIME_FORMAT);
 
-            Patient patient = controller.findPatient(patientId);
+            Patient patient = controller.findPatient(cedula);
             if (patient == null) return;
+            jTextField1.setText(patient.getFullName());
 
             Appointment appointment = new Appointment(code, patient, date, time, reason);
             appointment.setStatus(estadoSeleccionado());
@@ -263,6 +264,7 @@ public class Frmappointments extends javax.swing.JFrame implements Views<Object>
     public void clear() {
         jTextField1.setText("");
         jTextField2.setText("");
+        jTextField6.setText("");
         jTextField3.setText("");
         jTextField4.setText("");
         jTextField5.setText("");
@@ -274,7 +276,8 @@ public class Frmappointments extends javax.swing.JFrame implements Views<Object>
         if (!(data instanceof Appointment)) return;
         Appointment appointment = (Appointment) data;
         jTextField2.setText(appointment.getCode());
-        jTextField1.setText(appointment.getPatient().getId());
+        jTextField6.setText(appointment.getPatient().getId());
+        jTextField1.setText(appointment.getPatient().getFullName());
         jTextField3.setText(appointment.getDate().format(DATE_FORMAT));
         jTextField4.setText(appointment.getTime().format(TIME_FORMAT));
         jTextField5.setText(appointment.getReason());
