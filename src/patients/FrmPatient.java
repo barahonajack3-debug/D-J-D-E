@@ -207,7 +207,7 @@ public void showMessage(String message) {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
      try {
-
+        
         String cedula = jTextField1.getText().trim();
         String nombre = jTextField2.getText().trim();
         String telefono = jTextField3.getText().trim();
