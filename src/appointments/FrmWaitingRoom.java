@@ -38,7 +38,7 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TblRecord = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jInternalFrame1.setTitle("WaitingRoom Daily List");
         jInternalFrame1.setVisible(true);
