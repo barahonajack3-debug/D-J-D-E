@@ -7,29 +7,34 @@ package appointments;
 import clinic.ClinicControler;
 import clinic.Views;
 import java.util.Iterator;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Dario R
  */
-public class FrmWaitingRoom extends javax.swing.JFrame {
+public class FrmWaitingRoom extends javax.swing.JFrame implements Views<Object> {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmWaitingRoom.class.getName());
  private ClinicControler controller;
  
     public FrmWaitingRoom(ClinicControler controller) {
+        if (controller == null) {
+            throw new IllegalArgumentException("El controlador es obligatorio");
+        }
         this.controller = controller;
-        controller.setView((Views) this);
+        controller.setView(this);
         initComponents();
+        ShowData();
     }
     /**
      * Creates new form FrmWaitingRoom
      */
     public FrmWaitingRoom(){
         initComponents();
-        controller = ClinicControler.getInstance((Views) this);
-        controller.setView((Views) this);
+        controller = ClinicControler.getInstance(this);
+        controller.setView(this);
         ShowData();        
     }
     /**
@@ -72,6 +77,7 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Buscar.png"))); // NOI18N
         jButton3.setText("Search ");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         BtnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Eliminar.png"))); // NOI18N
         BtnDelete.setText("Delete");
@@ -170,8 +176,10 @@ public class FrmWaitingRoom extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 private void ShowData() {
     DefaultTableModel model = (DefaultTableModel) TblRecord.getModel();
+    model.setRowCount(0);
 
     Iterator<Appointment> it = controller.getAppointments();
+    if (it == null) return;
 
     while (it.hasNext()) {
         Appointment cita = it.next();
@@ -188,16 +196,66 @@ private void ShowData() {
 }
         
     private void BtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearActionPerformed
-       
+       TblRecord.clearSelection();
     }//GEN-LAST:event_BtnClearActionPerformed
 
     private void BtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSaveActionPerformed
-        // TODO add your handling code here:
+        String patientId = getSelectedValue(1, "Seleccione una cita para registrar al paciente.");
+        if (patientId != null) controller.checkInPatient(patientId);
     }//GEN-LAST:event_BtnSaveActionPerformed
 
     private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
-        // TODO add your handling code here:
+        String code = getSelectedValue(0, "Seleccione una cita para cancelar.");
+        if (code == null) return;
+
+        int option = JOptionPane.showConfirmDialog(this,
+                "¿Desea cancelar la cita " + code + "?", "Cancelar cita",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) controller.cancelAppointment(code);
     }//GEN-LAST:event_BtnDeleteActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String code = getSelectedValue(0, "Seleccione una cita para buscar.");
+        if (code != null) controller.findAppointment(code);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private String getSelectedValue(int column, String warning) {
+        int row = TblRecord.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, warning, "Sala de espera", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        Object value = TblRecord.getValueAt(row, column);
+        if (value == null || value.toString().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La fila seleccionada no tiene datos válidos.",
+                    "Sala de espera", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        return value.toString().trim(); 
+    }
+
+    @Override
+    public void clear() {
+        TblRecord.clearSelection();
+    }
+
+    @Override
+    public void showData(Object data) {
+        if (data instanceof String) {
+            showMessage((String) data);
+        }
+        ShowData();
+    }
+
+    @Override
+    public void showError(String error) {
+        JOptionPane.showMessageDialog(this, error, "Sala de espera", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Sala de espera", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments
