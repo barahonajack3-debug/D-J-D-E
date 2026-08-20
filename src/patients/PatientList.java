@@ -42,6 +42,7 @@ public class PatientList implements KeyDynamicsLists<Patient,String>{
     public boolean add(Patient item) {
       if(Patient.containsKey(item.getId())) return false;
       return Patient.put(item.getId(),item)== null;
+      
     }
 
     @Override
